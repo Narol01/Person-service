@@ -22,20 +22,22 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
 
     final PersonRepository personRepository;
     final ModelMapper modelMapper;
+    final PersonModelDtoMapper mapper;
 
     @Override
     public Boolean addPerson(PersonDto personDto) {
         if (personRepository.existsById(personDto.getId())) {
             return false;
         }
-        personRepository.save( modelMapper.map(personDto, Person.class));
+            personRepository.save( mapper.mapToModel(personDto));
         return true;
     }
 
     @Override
     public PersonDto findPersonById(Integer id) {
         Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
-        return modelMapper.map(person, PersonDto.class);
+
+        return mapper.mapToDto(person);
     }
 
     @Override
@@ -91,15 +93,19 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
         personRepository.delete(person);
         return modelMapper.map(person, PersonDto.class);
     }
-
+    @Transactional(readOnly = true)
     @Override
-    public ChildDto[] findAllChildren() {
-        return new ChildDto[0];
+    public EmployeeDto[] findEmployeesBySalary(Integer min, Integer max) {
+        return personRepository.findEmployeesBySalaryBetween(min,max)
+                .map(e->modelMapper.map(e, EmployeeDto.class))
+                .toArray(EmployeeDto[]::new);
     }
-
+    @Transactional(readOnly = true)
     @Override
-    public EmployeeDto[] findEmployeesBySalaryBetween(Double minSalary, Double maxSalary) {
-        return new EmployeeDto[0];
+    public ChildDto[] getChildren() {
+        return personRepository.findChildrenBy()
+                .map(c->modelMapper.map(c, ChildDto.class))
+                .toArray(ChildDto[]::new);
     }
 
     @Transactional

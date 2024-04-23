@@ -13,6 +13,7 @@ public interface PersonService {
     Iterable<CityPopulationDto> getCityPopulation();
     PersonDto updateAddress(Integer id, AddressDto addressDto);
     PersonDto deletePerson(Integer id);
-    ChildDto[] findAllChildren();
-    EmployeeDto[] findEmployeesBySalaryBetween(Double minSalary, Double maxSalary);
+    EmployeeDto[] findEmployeesBySalary(Integer min, Integer max);
+
+    ChildDto[] getChildren();
 }

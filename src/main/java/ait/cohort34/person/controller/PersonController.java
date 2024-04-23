@@ -50,12 +50,12 @@ public class PersonController {
 
     @GetMapping("/children")
     public ChildDto[] getAllChildren() {
-        return personService.findAllChildren();
+        return personService.getChildren();
     }
 
     @GetMapping("/salary/{minSalary}/{maxSalary}")
-    public EmployeeDto[] getEmployeesBySalary(@PathVariable Double minSalary,@PathVariable Double maxSalary) {
-        return personService.findEmployeesBySalaryBetween(minSalary,maxSalary);
+    public EmployeeDto[] getEmployeesBySalary(@PathVariable Integer minSalary,@PathVariable Integer maxSalary) {
+        return personService.findEmployeesBySalary(minSalary,maxSalary);
     }
 
 }
